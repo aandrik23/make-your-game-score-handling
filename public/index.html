@@ -93,9 +93,38 @@
         </div>
     </div>
 
+    <div id="gameEndOverlay" class="hidden">
+        <div id="scoreModal" class="score-modal hidden">
+            <h2 id="scoreTitle"></h2>
+            <p id="scoreInfo"></p>
+            <label id="scoreLabel" for="playerNameInput"></label>
+            <input type="text" id="playerNameInput" maxlength="20" placeholder="Your name">
+            <div id="scoreButtons">
+                <button id="submitScoreBtn">Submit Score</button>
+                <button id="skipScoreBtn">Skip</button>
+            </div>
+        </div>
 
+        <div id="scoreboardModal" class="scoreboard-modal hidden">
+            <h2>High Scores</h2>
+            <table id="scoreTable">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button id="closeScoreboardBtn">Close</button>
+        </div>
+    </div>
 
     <div id="game"></div>
+
+    
     <script type="module" src="./main.js"></script>
 
 

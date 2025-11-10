@@ -471,3 +471,74 @@ body {
 .countdown-overlay.pop {
   animation: popInOut 0.95s ease-in-out;
 }
+
+
+/* Scoreboard styles */
+#gameEndOverlay {
+    position: fixed;
+    /* inset: 0;
+    background: rgba(0,0,0,0.7); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.score-modal, .scoreboard-modal {
+    background: #222;
+    color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+
+.score-modal h2.win {
+    color: limegreen;
+}
+.score-modal h2.lose {
+    color: crimson;
+}
+
+.score-modal input {
+    width: 80%;
+    padding: 0.5rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    border: none;
+    text-align: center;
+}
+
+.score-modal button,
+.scoreboard-modal button {
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    margin: 0.3rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.score-modal button:hover,
+.scoreboard-modal button:hover {
+    background: #666;
+}
+
+.scoreboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.scoreboard-table th,
+.scoreboard-table td {
+    border-bottom: 1px solid #555;
+    padding: 0.4rem;
+}
+
+.hidden {
+    display: none !important;
+}
