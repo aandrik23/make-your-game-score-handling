@@ -108,12 +108,12 @@ export function showEnding(victory = true) {
             ? "Zone 01 is restored — your code saved the company from collapse."
             : "Zone 01 falls — the system is lost to the Null Sector."}
             </p>
-            <button id="returnToMenuBtn">Close</button>
+            <button id="Close">Close</button>
           </div>
         `;
         document.body.appendChild(overlay);
         
-         document.getElementById("returnToMenuBtn").onclick = () => {
+         document.getElementById("Close").onclick = () => {
            overlay.remove();
         //   showMainMenu();
           leaderboardUI(victory);

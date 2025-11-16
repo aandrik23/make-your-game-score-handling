@@ -2,6 +2,7 @@
 import { showMainMenu } from "./menu.js";
 import { submitScore, fetchScores } from "./scoreApi.js";
 import { getElapsedMs } from './gameLoop.js';
+import { score as currentScore } from "./gameState.js";
 
 let pendingGameResult = null; // { score, timeMs, didWin }
 let currentPage = 1;
@@ -235,9 +236,9 @@ export function leaderboardUI(result) {
   if (result === false) {
       const totalTimeMs = getElapsedMs();
       // didWin = false
-      handleGameOver(score, totalTimeMs, false);
+      handleGameOver(currentScore, totalTimeMs, false);
   } else {
     const totalTimeMs = getElapsedMs();
-    handleGameOver(score, totalTimeMs, true);
+    handleGameOver(currentScore, totalTimeMs, true);
   }
 }
