@@ -130,7 +130,17 @@ mainMenuBtn.onclick = () => {
 
 // pause logic:
 window.addEventListener("keydown", (e) => {
+    const activeEl = document.activeElement;
+    const typingInField =
+      activeEl &&
+      (activeEl.tagName === "INPUT" ||
+       activeEl.tagName === "TEXTAREA" ||
+       activeEl.isContentEditable);
 
+    if (typingInField) {
+      return;
+    }
+    
     if (e.code === "Space") e.preventDefault();
 
     if (e.repeat) return; // ignore if key is held down.   ***

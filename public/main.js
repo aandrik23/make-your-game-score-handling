@@ -1,4 +1,4 @@
-import { gamePaused, Restart, showMainMenu } from "./menu.js";
+import { gamePaused, gameRunning, Restart, showMainMenu } from "./menu.js";
 import { initAudioControls } from "./audio.js";
 
 import { player } from './bomber.js';
@@ -36,35 +36,56 @@ function applyCssImageVars() {
 applyCssImageVars();
 
 window.addEventListener("keydown", (e) => {
-    if (["b","B","ArrowUp","ArrowDown","ArrowLeft","ArrowRight","w","a","s","d","W","A","S","D"].includes(e.key)) {
-      e.preventDefault();
-    }
-    if (!player) return;
-  
-    if (gamePaused === false) {
-      switch (e.key) {
-        case "ArrowUp": case "w": case "W":
-          player.nextDir = { dx: 0, dy: -1 };
-          player.el.style.backgroundImage = `url(${IMAGE_PATHS.bomberUp})`;
-          break;
-        case "ArrowDown": case "s": case "S":
-          player.nextDir = { dx: 0, dy: 1 };
-          player.el.style.backgroundImage = `url(${IMAGE_PATHS.bomberDown})`;
-          break;
-        case "ArrowLeft": case "a": case "A":
-          player.nextDir = { dx: -1, dy: 0 };
-          player.el.style.backgroundImage = `url(${IMAGE_PATHS.bomberLeft})`;
-          break;
-        case "ArrowRight": case "d": case "D":
-          player.nextDir = { dx: 1, dy: 0 };
-          player.el.style.backgroundImage = `url(${IMAGE_PATHS.bomberRight})`;
-          break;
-        case "B": case "b":
-          player.dropBomb();
-          break;
-      }
-    }
-  });
+  const movementKeys = [
+    "b","B",
+    "ArrowUp","ArrowDown","ArrowLeft","ArrowRight",
+    "w","a","s","d","W","A","S","D"
+  ];
+
+  // 1) If user is typing in an input/textarea/contenteditable → game ignores keys
+  const activeEl = document.activeElement;
+  const typingInField =
+    activeEl &&
+    (activeEl.tagName === "INPUT" ||
+     activeEl.tagName === "TEXTAREA" ||
+     activeEl.isContentEditable);
+
+  if (typingInField) {
+    return;
+  }
+
+  // 2) Only block default for movement keys when *not* typing in UI
+  if (movementKeys.includes(e.key)) {
+    e.preventDefault();
+  }
+
+  // 3) If there's no player yet, or game not running, or paused → ignore
+  if (!player) return;
+  if (!gameRunning || gamePaused) return;
+
+  // 4) Now it's safe: game is active and owns these keys
+  switch (e.key) {
+    case "ArrowUp": case "w": case "W":
+      player.nextDir = { dx: 0, dy: -1 };
+      player.el.style.backgroundImage = `url(${IMAGE_PATHS.bomberUp})`;
+      break;
+    case "ArrowDown": case "s": case "S":
+      player.nextDir = { dx: 0, dy: 1 };
+      player.el.style.backgroundImage = `url(${IMAGE_PATHS.bomberDown})`;
+      break;
+    case "ArrowLeft": case "a": case "A":
+      player.nextDir = { dx: -1, dy: 0 };
+      player.el.style.backgroundImage = `url(${IMAGE_PATHS.bomberLeft})`;
+      break;
+    case "ArrowRight": case "d": case "D":
+      player.nextDir = { dx: 1, dy: 0 };
+      player.el.style.backgroundImage = `url(${IMAGE_PATHS.bomberRight})`;
+      break;
+    case "B": case "b":
+      player.dropBomb();
+      break;
+  }
+});
 
 
 //Initialize audio controls
