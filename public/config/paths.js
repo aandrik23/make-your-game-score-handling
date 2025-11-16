@@ -1,8 +1,8 @@
 // config/paths.js
 export const BASE_DIRS = {
-  sounds: "./assets/sounds/",
-  images: "./assets/images/",
-  videos: "./assets/video/"
+  sounds: "/assets/sounds/",
+  images: "/assets/images/",
+  videos: "/assets/video/"
 };
 
 export const AUDIO_PATHS = {

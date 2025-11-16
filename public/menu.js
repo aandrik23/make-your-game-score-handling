@@ -1,8 +1,9 @@
-import { buildMap, resetGame } from "./bomber.js";
-import { gameLoop, resetTimer, setPausedAt, resetFrameTimers, addPausedDuration } from "./gameLoop.js";
+import { buildMap,resetGame  } from "./bomber.js";
+import { gameLoop, resetTimer,setPausedAt, resetFrameTimers  } from "./gameLoop.js";
 import { startMusic, stopMusic } from "./audio.js";
 import { showIntro } from "./storyMode.js";
 import { runCountdown } from "./countdown.js";
+import { loadAndShowScoreboard } from "./scoreboard.js";
 
 export let gamePaused = true;
 export let gameRunning = false;
@@ -17,6 +18,7 @@ const pauseMenu = document.getElementById("pauseMenu");
 const startBtn = document.getElementById("startBtn");
 const infoBtn = document.getElementById("infoBtn");
 const settingsBtn = document.getElementById("settingsBtn");
+const ldrboardBtn = document.getElementById("leaderboard")
 const quitBtn = document.getElementById("quitBtn");
 
 //PAUSE MENU
@@ -71,6 +73,10 @@ startBtn.onclick = () => {
     showIntro();
 };
 
+ldrboardBtn.onclick = () => {
+    menu.style.display = "none";
+    loadAndShowScoreboard();
+};
 
 infoBtn.onclick = () => {
     SetGameRunning(false);
@@ -116,6 +122,7 @@ restartBtn.onclick = () => {
 
 };
 mainMenuBtn.onclick = () => {
+    resetGame();
     showMainMenu();
     gameRunning = false;
 };
@@ -171,12 +178,11 @@ export function Continue() {
     stopMusic();
 
     runCountdown(() => {
-        addPausedDuration()
+        gamePaused = false;
         SetGameRunning(true);
         resetFrameTimers();
         startMusic();
         hideMenu();
-        gamePaused = false;
     })
 }
 

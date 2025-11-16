@@ -1,0 +1,222 @@
+/* === Generic modal overlay + panel === */
+.modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2500;
+  }
+  
+  .modal .modal-content {
+    background: #302c2c;
+    border-radius: 16px;
+    padding: 24px 28px;
+    min-width: 320px;
+    max-width: 640px;
+    color: #ffffff;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* === Name prompt modal === */
+  #namePromptModal .modal-content {
+    text-align: center;
+  }
+  
+  #namePromptModal h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.4rem;
+    color: #ffcc00;
+  }
+  
+  #namePromptModal p {
+    margin: 0 0 14px 0;
+    font-size: 0.95rem;
+    opacity: 0.9;
+  }
+  
+  #playerNameInput {
+    width: 100%;
+    max-width: 260px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #1f1b1b;
+    color: #fff;
+    outline: none;
+    margin-bottom: 14px;
+    font-size: 0.95rem;
+  }
+  
+  #playerNameInput::placeholder {
+    color: #999;
+  }
+  
+  #playerNameInput:focus {
+    border-color: #F2A53E;
+    box-shadow: 0 0 0 2px rgba(242, 165, 62, 0.4);
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: center;
+  }
+  
+  #submitScoreBtn {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    background-color: #F2A53E;
+    color: #111;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+  
+  #submitScoreBtn:hover {
+    transform: scale(1.05);
+    background-color: #365892;
+    color: #fff;
+  }
+  
+  /* === Scoreboard modal === */
+  #scoreboardModal .modal-content {
+    max-width: 720px;
+  }
+  
+  #scoreboardTitle {
+    margin-top: 0;
+    margin-bottom: 6px;
+    font-size: 1.6rem;
+    color: #ffcc00;
+    text-align: center;
+  }
+  
+  #scoreboardMessage {
+    margin: 0 0 14px 0;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #e3e6ff;
+  }
+  
+  /* Table styling */
+  #scoreboardTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14px;
+    font-size: 0.95rem;
+  }
+  
+  #scoreboardTable thead tr {
+    background: #1f2838;
+  }
+  
+  #scoreboardTable th,
+  #scoreboardTable td {
+    padding: 8px 10px;
+    text-align: left;
+  }
+  
+  #scoreboardTable th {
+    font-weight: 600;
+    color: #ffcc00;
+    border-bottom: 2px solid #2f3b4f;
+  }
+  
+  #scoreboardTable tbody tr:nth-child(even) {
+    background: #3a3434;
+  }
+  
+  #scoreboardTable tbody tr:nth-child(odd) {
+    background: #2f2a2a;
+  }
+  
+  #scoreboardTable tbody tr:hover {
+    background: #414852;
+  }
+  
+  /* Highlight last submitted row */
+  .scoreboard-highlight {
+    background: linear-gradient(90deg, rgba(242,165,62,0.18), rgba(54,88,146,0.5));
+    box-shadow: inset 0 0 0 1px rgba(255, 204, 0, 0.5);
+  }
+  
+  /* Footer (pagination + close) */
+  .scoreboard-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  
+  #scorePageLabel {
+    min-width: 90px;
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.85;
+  }
+  
+  #scorePrevBtn,
+  #scoreNextBtn,
+  #scoreCloseBtn {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    background-color: #F2A53E;
+    color: #111;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+  
+  #scorePrevBtn:hover,
+  #scoreNextBtn:hover,
+  #scoreCloseBtn:hover {
+    transform: scale(1.05);
+    background-color: #365892;
+    color: #fff;
+  }
+
+  /* Search bar above the scoreboard table */
+.scoreboard-search {
+  width: 100%;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+#scoreSearchInput {
+  width: 100%;
+  max-width: 260px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: #1f1b1b;
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+#scoreSearchInput::placeholder {
+  color: #999;
+}
+
+#scoreSearchInput:focus {
+  border-color: #F2A53E;
+  box-shadow: 0 0 0 2px rgba(242, 165, 62, 0.4);
+}
+  
+  /* Make close button full-width on small screens */
+  @media (max-width: 520px) {
+    #scoreCloseBtn {
+      width: 100%;
+      margin-top: 4px;
+    }
+  }
+  

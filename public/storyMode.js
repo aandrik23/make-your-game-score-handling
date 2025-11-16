@@ -75,7 +75,7 @@ export function showMidStory() {
     game.style.display = "grid";
     SetGameRunning(true);
     Continue();
-
+    
   }
 }
 
@@ -107,16 +107,15 @@ export function showEnding(victory = true) {
             ? "Zone 01 is restored — your code saved the company from collapse."
             : "Zone 01 falls — the system is lost to the Null Sector."}
             </p>
-            <button id="returnToMenuBtn">Return to Menu</button>
+            <button id="returnToMenuBtn">Close</button>
           </div>
         `;
         document.body.appendChild(overlay);
-
-        document.getElementById("returnToMenuBtn").onclick = () => {
-          overlay.remove();
-          game.style.display = "grid";
-          showMainMenu();
-        };
+        
+         document.getElementById("returnToMenuBtn").onclick = () => {
+           overlay.remove();
+        //   showMainMenu();
+         };
       });
     } else {
       // check again after a short delay

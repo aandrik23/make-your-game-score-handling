@@ -5,6 +5,9 @@ import { player } from './bomber.js';
 
 import { IMAGE_PATHS } from "./config/paths.js";
 
+import { initScoreboardUI } from "./scoreboard.js";
+
+
 function applyCssImageVars() {
   const vars = {
     "--img-wall":        `url(${IMAGE_PATHS.wall})`,
@@ -69,6 +72,9 @@ initAudioControls();
 
 // Show main menu on load
 showMainMenu();
+
+// Initialize scoreboard UI
+initScoreboardUI();
 
 // Link story start to menu’s Start button
 export function startStoryGame() {

@@ -5,6 +5,7 @@ import { gamePaused, animationState } from "./menu.js";
 import { PlayPowerUpSound, PlayLevelClearedSound, stopMusic } from "./audio.js";
 import { loadYouWin } from "./videos.js";
 import { showEnding, showMidStory } from "./storyMode.js";
+import { handleGameOver } from "./scoreboard.js";
 
 
 
@@ -20,12 +21,17 @@ let portSpawned = false; // track if we already spawned a port
 let levelCompleted = false; // track if level is completed
 
 let midStoryShown = false
+let gameOverTriggered = false;
 
+export function getElapsedMs() {
+    return performance.now() - startTime - totalPausedTime;
+}
 
 export function ResetPort() {
     levelCompleted = false;
     portSpawned = false
     midStoryShown = false
+    gameOverTriggered = false;
 }
 
 // MAIN GAMELOOP
@@ -45,18 +51,18 @@ export function gameLoop(time) {
         lastFpsUpdate = time;
         document.getElementById("fps").textContent = `FPS: ${fps}`;
 
+        // Update lives and score
+        document.getElementById("lives").textContent = `Lives: ${lives}`;
+        document.getElementById("score").textContent = `Score: ${score}`;
+        document.getElementById("difficulty").textContent = `Difficulty: ${difficulty}`;
+
+
+        // Update timer
+        const elapsed = Math.floor((time - startTime - totalPausedTime) / 1000); // in seconds
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = elapsed % 60;
+        document.getElementById("timer").textContent = `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
     }
-    // Update lives and score
-    document.getElementById("lives").textContent = `Lives: ${lives}`;
-    document.getElementById("score").textContent = `Score: ${score}`;
-    document.getElementById("difficulty").textContent = `Difficulty: ${difficulty}`;
-
-
-    // Update timer
-    const elapsed = Math.floor((time - startTime - totalPausedTime) / 1000); // in seconds
-    const minutes = Math.floor(elapsed / 60);
-    const seconds = elapsed % 60;
-    document.getElementById("timer").textContent = `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
 
     // 1️⃣ Move player and enemies
     entities.forEach(e => {
@@ -119,6 +125,10 @@ export function gameLoop(time) {
                     stopMusic();
                     PlayLevelClearedSound();
                     loadYouWin();
+
+                    //  // ✅ Compute final time and send score
+                     const totalTimeMs = getElapsedMs();
+                     handleGameOver(score, totalTimeMs, true);
                 }
                 showEnding(true);
 
@@ -200,7 +210,7 @@ export function setPausedAt() {
 
 export function addPausedDuration() {
     if (pausedAt !== null) {
-        totalPausedTime += performance.now() - pausedAt - 0.7;
+        totalPausedTime += performance.now() - pausedAt;
         pausedAt = null;
     }
 }
