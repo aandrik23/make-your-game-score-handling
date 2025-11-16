@@ -131,6 +131,9 @@ func handleGetScores(w http.ResponseWriter, r *http.Request) {
 		page = 1
 	}
 
+	// Tell browser: don't cache this
+	w.Header().Set("Cache-Control", "no-store")
+
 	resp := getScoresResponse{
 		Page:       page,
 		PerPage:    perPage,

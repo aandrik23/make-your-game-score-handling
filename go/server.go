@@ -101,7 +101,7 @@ func main() {
 		close(idle)
 	}()
 
-	// Serve (blocking)
+	// Serve
 	if err := srv.Serve(ln); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("server: %v", err)
 	}

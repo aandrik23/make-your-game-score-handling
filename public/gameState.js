@@ -9,7 +9,7 @@ import { handleGameOver } from './scoreboard.js';
 
 export let score = 0;
 export let lives = 3
-let gameOverHandled = false;
+
 
 export function addScore(points) {
     score += points;
@@ -18,7 +18,6 @@ export function addScore(points) {
 export function resetStats() {
     score = 0;
     lives = 3;
-    gameOverHandled = false;
 }
 
 export function playerHit() {
@@ -32,12 +31,12 @@ export function playerHit() {
             loadGameOver();
             showEnding(false);
 
-            if (!gameOverHandled) {
-                gameOverHandled = true;
-                const totalTimeMs = getElapsedMs();
-                // didWin = false
-                handleGameOver(score, totalTimeMs, false);
-            }
+            // if (!gameOverHandled) {
+            //     gameOverHandled = true;
+            //     const totalTimeMs = getElapsedMs();
+            //     // didWin = false
+            //     handleGameOver(score, totalTimeMs, false);
+            // }
         }
 
         // Reset player position

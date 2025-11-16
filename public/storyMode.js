@@ -3,6 +3,7 @@
 import { startStoryGame } from "./main.js";
 import { Continue, Pause, SetGameRunning, showMainMenu } from "./menu.js";
 import { loadGameOver, loadYouWin } from "./videos.js";
+import { leaderboardUI } from './scoreboard.js';
 
 // Intro, development, and ending story screens for Bomber Game
 
@@ -115,7 +116,9 @@ export function showEnding(victory = true) {
          document.getElementById("returnToMenuBtn").onclick = () => {
            overlay.remove();
         //   showMainMenu();
+          leaderboardUI(victory);
          };
+         
       });
     } else {
       // check again after a short delay

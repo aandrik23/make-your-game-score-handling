@@ -127,8 +127,8 @@ export function gameLoop(time) {
                     loadYouWin();
 
                     //  // ✅ Compute final time and send score
-                     const totalTimeMs = getElapsedMs();
-                     handleGameOver(score, totalTimeMs, true);
+                    //  const totalTimeMs = getElapsedMs();
+                    //  handleGameOver(score, totalTimeMs, true);
                 }
                 showEnding(true);
 

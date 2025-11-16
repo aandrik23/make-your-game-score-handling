@@ -1,6 +1,7 @@
 // scoreboard.js
 import { showMainMenu } from "./menu.js";
 import { submitScore, fetchScores } from "./scoreApi.js";
+import { getElapsedMs } from './gameLoop.js';
 
 let pendingGameResult = null; // { score, timeMs, didWin }
 let currentPage = 1;
@@ -227,5 +228,16 @@ export function handleGameOver(finalScore, totalTimeMs, didWin) {
     window.__showNameModalForScore();
   } else {
     console.warn("Scoreboard UI not initialized yet.");
+  }
+}
+
+export function leaderboardUI(result) {
+  if (result === false) {
+      const totalTimeMs = getElapsedMs();
+      // didWin = false
+      handleGameOver(score, totalTimeMs, false);
+  } else {
+    const totalTimeMs = getElapsedMs();
+    handleGameOver(score, totalTimeMs, true);
   }
 }
