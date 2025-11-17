@@ -93,7 +93,30 @@ func (sb *Scoreboard) AddScore(name string, score int, timeMs int64) (rank int, 
 	sb.mu.Lock()
 	defer sb.mu.Unlock()
 
-	sb.scores = append(sb.scores, entry)
+	// Check if this name already exists
+	foundIndex := -1
+	for i, s := range sb.scores {
+		if s.Name == name {
+			foundIndex = i
+
+			// Decide if new result is better:
+			// - higher score wins
+			// - if scores equal, lower time wins
+			if score > s.Score || (score == s.Score && timeMs < s.TimeMs) {
+				// New personal best → replace old record
+				sb.scores[i] = entry
+			} else {
+				// Old record is better → keep it, treat that as "entry"
+				entry = s
+			}
+			break
+		}
+	}
+
+	// If no existing record for this name, append new one
+	if foundIndex == -1 {
+		sb.scores = append(sb.scores, entry)
+	}
 
 	// maintain sorted order
 	sort.Slice(sb.scores, func(i, j int) bool {

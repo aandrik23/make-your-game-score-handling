@@ -1,6 +1,12 @@
 {
   "scores": [
     {
+      "name": "eshwa",
+      "score": 1220,
+      "time_ms": 79113,
+      "created_at": "2025-11-17T03:40:50.967088012Z"
+    },
+    {
       "name": "egggg",
       "score": 765,
       "time_ms": 53059,
@@ -17,12 +23,6 @@
       "score": 165,
       "time_ms": 17016,
       "created_at": "2025-11-16T19:15:34.020607029Z"
-    },
-    {
-      "name": "eshwa",
-      "score": 145,
-      "time_ms": 12865,
-      "created_at": "2025-11-16T17:45:43.312669215Z"
     },
     {
       "name": "tso ke lo",
