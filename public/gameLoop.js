@@ -125,10 +125,6 @@ export function gameLoop(time) {
                     stopMusic();
                     PlayLevelClearedSound();
                     loadYouWin();
-
-                    //  // ✅ Compute final time and send score
-                    //  const totalTimeMs = getElapsedMs();
-                    //  handleGameOver(score, totalTimeMs, true);
                 }
                 showEnding(true);
 

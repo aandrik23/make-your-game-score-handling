@@ -109,10 +109,6 @@ backBtn.onclick = () => {
     settingsMenu.style.display = "none";   // hide settings menu    // show main menu again
 };
 
-quitBtn.onclick = () => {
-    window.close();
-};
-
 // Pause menu buttons
 continueBtn.onclick = () => {
     Continue();

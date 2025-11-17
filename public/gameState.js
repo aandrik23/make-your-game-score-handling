@@ -30,13 +30,6 @@ export function playerHit() {
             PlayLevelFailedSound();
             loadGameOver();
             showEnding(false);
-
-            // if (!gameOverHandled) {
-            //     gameOverHandled = true;
-            //     const totalTimeMs = getElapsedMs();
-            //     // didWin = false
-            //     handleGameOver(score, totalTimeMs, false);
-            // }
         }
 
         // Reset player position
