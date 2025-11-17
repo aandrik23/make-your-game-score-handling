@@ -96,7 +96,7 @@ func (sb *Scoreboard) AddScore(name string, score int, timeMs int64) (rank int, 
 	// Check if this name already exists
 	foundIndex := -1
 	for i, s := range sb.scores {
-		if s.Name == name {
+		if s.Name == name && s.Name != "Anonymous" {
 			foundIndex = i
 
 			// Decide if new result is better:

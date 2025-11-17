@@ -401,7 +401,7 @@ function spawnExplosions(x, y, radius, tileMap2D) {
       entities.push(new Explosion(nx, ny));
 
       if (tileChar === "B") {
-        addScore(15);
+        addScore(10);
 
         // ✅ update 2D array
         updateTileMap2D(nx, ny, " "); // change brick to floor

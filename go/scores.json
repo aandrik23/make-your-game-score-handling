@@ -2,21 +2,57 @@
   "scores": [
     {
       "name": "eshwa",
-      "score": 1220,
-      "time_ms": 79113,
-      "created_at": "2025-11-17T03:40:50.967088012Z"
+      "score": 21000,
+      "time_ms": 77480,
+      "created_at": "2025-11-17T15:32:01.704823717Z"
     },
     {
-      "name": "andreas",
-      "score": 840,
-      "time_ms": 102915,
-      "created_at": "2025-11-17T17:12:24.028484Z"
+      "name": "Anonymous",
+      "score": 1400,
+      "time_ms": 68309,
+      "created_at": "2025-11-17T15:38:12.655932193Z"
+    },
+    {
+      "name": "Anonymous",
+      "score": 1200,
+      "time_ms": 66963,
+      "created_at": "2025-11-17T15:43:07.724452766Z"
+    },
+    {
+      "name": "eeeee",
+      "score": 900,
+      "time_ms": 59566,
+      "created_at": "2025-11-17T16:07:43.491076491Z"
     },
     {
       "name": "egggg",
       "score": 765,
       "time_ms": 53059,
       "created_at": "2025-11-16T04:57:29.646557253Z"
+    },
+    {
+      "name": "Anonymous",
+      "score": 700,
+      "time_ms": 44161,
+      "created_at": "2025-11-17T15:40:44.175833355Z"
+    },
+    {
+      "name": "Anonymous",
+      "score": 650,
+      "time_ms": 85784,
+      "created_at": "2025-11-17T18:41:35.289129Z"
+    },
+    {
+      "name": "Anonymous",
+      "score": 560,
+      "time_ms": 58912,
+      "created_at": "2025-11-17T18:42:50.772112Z"
+    },
+    {
+      "name": "tso ke lo",
+      "score": 445,
+      "time_ms": 68023,
+      "created_at": "2025-11-17T04:00:15.470148684Z"
     },
     {
       "name": "testing",
@@ -29,18 +65,6 @@
       "score": 165,
       "time_ms": 17016,
       "created_at": "2025-11-16T19:15:34.020607029Z"
-    },
-    {
-      "name": "tso ke lo",
-      "score": 120,
-      "time_ms": 58474,
-      "created_at": "2025-11-16T21:40:43.799065428Z"
-    },
-    {
-      "name": "eeeee",
-      "score": 0,
-      "time_ms": 6873,
-      "created_at": "2025-11-14T20:26:17.323884935Z"
     },
     {
       "name": "eeeee",
@@ -59,12 +83,6 @@
       "score": 0,
       "time_ms": 16875,
       "created_at": "2025-11-15T16:33:43.741514104Z"
-    },
-    {
-      "name": "Anonymous",
-      "score": 0,
-      "time_ms": 24702,
-      "created_at": "2025-11-15T16:36:17.514388748Z"
     }
   ]
 }

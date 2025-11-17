@@ -100,7 +100,8 @@ export function initScoreboardUI() {
   if (searchInput) {
     searchInput.addEventListener("input", () => {
       currentSearchTerm = searchInput.value.trim().toLowerCase();
-      renderScoreRows(lastPageInfo);  // re-render current page with filter
+      // renderScoreRows(lastPageInfo);  // re-render current page with filter
+      renderScoreRows(lastPageInfo);
     });
   }
   // Expose to other modules

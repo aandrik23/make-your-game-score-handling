@@ -1,7 +1,7 @@
 import { Player, Enemy, Tile, PowerUp } from "./classes.js";
 import { resetFrameTimers, ResetPort, resetTimer } from "./gameLoop.js";
 import { resetStats } from "./gameState.js";
-import { Continue, Restart } from "./menu.js";
+import { Continue, Restart, gamePaused, gameRunning } from "./menu.js";
 
 
 import { tileMap, getFreshTileMap2D } from "./mapData.js";
@@ -124,8 +124,10 @@ buttons.forEach(button => {
         } else if (difficulty === "hard") {
             randomEnemy = 0.3;
         }
-        Restart()
-        Continue()
+        if (player && (gameRunning || gamePaused)) {
+             Restart()
+            Continue()
+        } 
         settingsMenu.style.display = "none";   // hide settings menu 
 
     });

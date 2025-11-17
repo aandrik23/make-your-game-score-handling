@@ -80,17 +80,17 @@ export function showMidStory() {
   }
 }
 
-export function showEnding(victory = true) {
+export function showEnding(victory) {
   SetGameRunning(false);
   Pause();
   game.style.display = "none";
 
   //play the video based on victory or defeat
-  if (victory) {
-    loadYouWin();
-  } else {
-    loadGameOver();
-  }
+  // if (victory) {
+  //   loadYouWin();
+  // } else {
+  //   loadGameOver();
+  // }
 
   const checkVideoEnd = () => {
     const videos = document.querySelectorAll("video");

@@ -1,5 +1,5 @@
 import { entities, player, difficulty, tileMap2D } from "./bomber.js";
-import { addScore, lives, score, playerHit } from "./gameState.js";
+import { addScore, lives, score, playerHit, difficultyMultiplier } from "./gameState.js";
 import { Player, Bomb, PowerUp, Explosion, Enemy, Objective } from "./classes.js";
 import { gamePaused, animationState } from "./menu.js";
 import { PlayPowerUpSound, PlayLevelClearedSound, stopMusic } from "./audio.js";
@@ -21,7 +21,6 @@ let portSpawned = false; // track if we already spawned a port
 let levelCompleted = false; // track if level is completed
 
 let midStoryShown = false
-let gameOverTriggered = false;
 
 export function getElapsedMs() {
     return performance.now() - startTime - totalPausedTime;
@@ -31,7 +30,6 @@ export function ResetPort() {
     levelCompleted = false;
     portSpawned = false
     midStoryShown = false
-    gameOverTriggered = false;
 }
 
 // MAIN GAMELOOP
@@ -51,7 +49,10 @@ export function gameLoop(time) {
         lastFpsUpdate = time;
         document.getElementById("fps").textContent = `FPS: ${fps}`;
 
-        // Update lives and score
+       
+    }
+
+     // Update lives and score
         document.getElementById("lives").textContent = `Lives: ${lives}`;
         document.getElementById("score").textContent = `Score: ${score}`;
         document.getElementById("difficulty").textContent = `Difficulty: ${difficulty}`;
@@ -62,7 +63,7 @@ export function gameLoop(time) {
         const minutes = Math.floor(elapsed / 60);
         const seconds = elapsed % 60;
         document.getElementById("timer").textContent = `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
-    }
+
 
     // 1️⃣ Move player and enemies
     entities.forEach(e => {
@@ -102,6 +103,7 @@ export function gameLoop(time) {
                 e.collected = true;
                 // maybe open the port or mark that player has key
                 player.hasKey = true;
+                
                 // 🔹 Spawn port somewhere random on floor
                 spawnPortRandom();
                 if (!midStoryShown) {
@@ -121,13 +123,13 @@ export function gameLoop(time) {
             // if it’s the port
             if (!levelCompleted && e.el.classList.contains("port") && collision(player.bounds, e.bounds)) {
                 if (player.hasKey) {
+                    difficultyMultiplier();
                     levelCompleted = true;
                     stopMusic();
                     PlayLevelClearedSound();
                     loadYouWin();
                 }
                 showEnding(true);
-
             }
         }
 
@@ -169,7 +171,7 @@ function collision(a, b) {
 
 function playerEat(powerUp) {
     PlayPowerUpSound();
-    addScore(10);
+    addScore(50);
     player.bombRadius++;   // INCREASE radius
     powerUp.el.remove();
     powerUp.collected = true; // mark for later removal
