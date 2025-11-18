@@ -13,6 +13,9 @@ let currentScoresPage = [];   // scores of the current page
 let currentSearchTerm = "";   // live search term
 let lastPageInfo = { page: 1, totalPages: 1 };
 
+let allScores = [];
+let allScoresLoaded = false;
+
 function formatTimeMs(timeMs) {
   const totalSeconds = Math.floor(timeMs / 1000);
   const minutes = Math.floor(totalSeconds / 60);
@@ -69,18 +72,57 @@ export function initScoreboardUI() {
   });
 
   closeBtn.addEventListener("click", () => {
+    // Hide modal
     scoreboardModal.style.display = "none";
-    showMainMenu()
+  
+    // Reset search state
+    currentSearchTerm = "";
+    const searchInput = document.getElementById("scoreSearchInput");
+    if (searchInput) {
+      searchInput.value = "";
+    }
+  
+    // Reset pagination state
+    currentPage = 1;
+    lastPageInfo = { page: 1, totalPages: 1 };
+  
+    // Force a fresh fetch next time
+    allScoresLoaded = false;
+  
+    showMainMenu();
   });
-
+  
   prevBtn.addEventListener("click", async () => {
+    // SEARCH MODE: paginate client-side only
+    if (currentSearchTerm) {
+      if (currentPage > 1) {
+        currentPage--;
+        renderScoreRows({ page: currentPage, totalPages: 1 }, true); // useAllScores = true
+      }
+      return;
+    }
+  
+    // NORMAL MODE: server paging
     if (currentPage > 1) {
       currentPage--;
       await loadAndShowScoreboard(false); // no message change
     }
   });
-
+  
   nextBtn.addEventListener("click", async () => {
+    // SEARCH MODE: paginate client-side only
+    if (currentSearchTerm) {
+      const filtered = getFilteredSearchScores();
+      const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+  
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderScoreRows({ page: currentPage, totalPages }, true); // useAllScores = true
+      }
+      return;
+    }
+  
+    // NORMAL MODE: server paging
     currentPage++;
     const changed = await loadAndShowScoreboard(false);
     if (!changed) {
@@ -98,14 +140,54 @@ export function initScoreboardUI() {
   const searchInput = document.getElementById("scoreSearchInput");
 
   if (searchInput) {
-    searchInput.addEventListener("input", () => {
+    searchInput.addEventListener("input", async () => {
       currentSearchTerm = searchInput.value.trim().toLowerCase();
-      // renderScoreRows(lastPageInfo);  // re-render current page with filter
-      renderScoreRows(lastPageInfo);
+  
+      if (currentSearchTerm) {
+        // Load all pages once, then filter in-memory
+        await getAllScores();
+        currentPage = 1;
+        renderScoreRows({ page: 1, totalPages: 1 }, true);
+      } else {
+        // No search term: go back to normal paginated view
+        currentSearchTerm = "";
+        renderScoreRows(lastPageInfo, false);
+      }
     });
   }
   // Expose to other modules
   window.__showNameModalForScore = showNameModal;
+}
+
+async function getAllScores() {
+  if (allScoresLoaded && allScores.length > 0) {
+    return allScores;
+  }
+
+  // We need total pages; use lastPageInfo if available, otherwise fetch page 1 once.
+  let totalPages = lastPageInfo.totalPages || 1;
+  if (!totalPages || totalPages < 1) {
+    const first = await fetchScores(1, PER_PAGE);
+    totalPages = first.total_pages || 1;
+  }
+
+  const collected = [];
+
+  for (let p = 1; p <= totalPages; p++) {
+    const data = await fetchScores(p, PER_PAGE);
+    const { scores } = data;
+
+    scores.forEach((s, idx) => {
+      collected.push({
+        ...s,
+        _rank: (p - 1) * PER_PAGE + idx + 1,
+      });
+    });
+  }
+
+  allScores = collected;
+  allScoresLoaded = true;
+  return allScores;
 }
 
 export async function loadAndShowScoreboard(updateMessage = true) {
@@ -140,6 +222,7 @@ export async function loadAndShowScoreboard(updateMessage = true) {
       }));
     
       lastPageInfo = { page: effectivePage, totalPages: total_pages };
+      allScoresLoaded = false; // scores may have changed, reset cache
       renderScoreRows(lastPageInfo);
     }
     
@@ -162,24 +245,52 @@ export async function loadAndShowScoreboard(updateMessage = true) {
   }
 }
 
-function renderScoreRows(pageInfo) {
+function getFilteredSearchScores() {
+  return (allScores || []).filter(
+    (s) =>
+      !currentSearchTerm ||
+      s.name.toLowerCase().includes(currentSearchTerm)
+  );
+}
+
+function renderScoreRows(pageInfo, useAllScores = false) {
   const tbody = document.querySelector("#scoreboardTable tbody");
   const pageLabel = document.getElementById("scorePageLabel");
   if (!tbody || !pageLabel) return;
 
-  const { page, totalPages } = pageInfo;
+  const source = useAllScores ? allScores : currentScoresPage;
 
-  const filtered = currentScoresPage.filter((s) =>
-    !currentSearchTerm ||
-    s.name.toLowerCase().includes(currentSearchTerm)
+  const filtered = (source || []).filter(
+    (s) =>
+      !currentSearchTerm ||
+      s.name.toLowerCase().includes(currentSearchTerm)
   );
+
+  let page = pageInfo.page || 1;
+  let totalPages = pageInfo.totalPages || 1;
+
+  // By default, show everything we have (normal mode: `currentScoresPage`
+  // is already capped to PER_PAGE).
+  let displayItems = filtered;
+
+  // When searching (`useAllScores === true`), apply PER_PAGE on the
+  // filtered list instead of showing everything.
+  if (useAllScores && currentSearchTerm) {
+    totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+
+    if (page > totalPages) page = totalPages;
+    if (page < 1) page = 1;
+
+    const start = (page - 1) * PER_PAGE;
+    displayItems = filtered.slice(start, start + PER_PAGE);
+  }
 
   tbody.innerHTML = "";
 
-  if (filtered.length === 0) {
+  if (displayItems.length === 0) {
     tbody.innerHTML = "<tr><td colspan='4'>No matching scores.</td></tr>";
   } else {
-    filtered.forEach((s) => {
+    displayItems.forEach((s) => {
       const tr = document.createElement("tr");
 
       const tdRank = document.createElement("td");
@@ -210,6 +321,7 @@ function renderScoreRows(pageInfo) {
 
   pageLabel.textContent = `Page ${page}/${totalPages}`;
 }
+
 
 // This is the function your game should call at the end of a run.
 export function handleGameOver(finalScore, totalTimeMs, didWin) {
