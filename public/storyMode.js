@@ -85,12 +85,6 @@ export function showEnding(victory) {
   Pause();
   game.style.display = "none";
 
-  //play the video based on victory or defeat
-  // if (victory) {
-  //   loadYouWin();
-  // } else {
-  //   loadGameOver();
-  // }
 
   const checkVideoEnd = () => {
     const videos = document.querySelectorAll("video");

@@ -114,7 +114,7 @@ const buttons = document.querySelectorAll(".difficultyBtn");
 buttons.forEach(button => {
     button.addEventListener("click", () => {
         difficulty = button.dataset.level; // "easy", "medium", or "hard"
-        console.log("Difficulty set to:", difficulty);
+        //console.log("Difficulty set to:", difficulty);
 
         // Assign values
         if (difficulty === "easy") {

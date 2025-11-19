@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"strings"
 )
 
 var scoreboard *Scoreboard // initialized in main()
@@ -36,48 +35,7 @@ type getScoresResponse struct {
 func ScoresHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
-		var req struct {
-			Name   string `json:"name"`
-			Score  int    `json:"score"`
-			TimeMs int64  `json:"time_ms"`
-		}
-
-		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-			log.Printf("ScoresHandler POST decode error: %v", err)
-			http.Error(w, "bad json", http.StatusBadRequest)
-			return
-		}
-
-		// example validation – make sure this matches what you want
-		if req.Name == "" {
-			req.Name = "Anonymous"
-		}
-		if req.Score < 0 || req.TimeMs <= 0 {
-			log.Printf("ScoresHandler invalid data: score=%d time_ms=%d", req.Score, req.TimeMs)
-			http.Error(w, "invalid score", http.StatusBadRequest)
-			return
-		}
-
-		rank, total, err := scoreboard.AddScore(req.Name, req.Score, req.TimeMs)
-		if err != nil {
-			log.Printf("ScoresHandler AddScore error: %v", err)
-			http.Error(w, "could not store score", http.StatusInternalServerError)
-			return
-		}
-
-		pct := Percentile(rank, total)
-
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(struct {
-			Rank       int     `json:"rank"`
-			Percentile float64 `json:"percentile"`
-			Total      int     `json:"total"`
-		}{
-			Rank:       rank,
-			Percentile: pct,
-			Total:      total,
-		})
-
+		handlePostScore(w, r)
 	case http.MethodGet:
 		handleGetScores(w, r)
 	default:
@@ -88,30 +46,48 @@ func ScoresHandler(w http.ResponseWriter, r *http.Request) {
 func handlePostScore(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
-	var req postScoreRequest
+	var req struct {
+		Name   string `json:"name"`
+		Score  int    `json:"score"`
+		TimeMs int64  `json:"time_ms"`
+	}
+
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "invalid JSON", http.StatusBadRequest)
+		log.Printf("ScoresHandler POST decode error: %v", err)
+		http.Error(w, "bad json", http.StatusBadRequest)
 		return
 	}
-	req.Name = strings.TrimSpace(req.Name)
-	if req.Name == "" || req.Score < 0 || req.TimeMs <= 0 {
-		http.Error(w, "invalid score payload", http.StatusBadRequest)
+
+	// example validation – make sure this matches what you want
+	if req.Name == "" {
+		req.Name = "Anonymous"
+	}
+	if req.Score < 0 || req.TimeMs <= 0 {
+		log.Printf("ScoresHandler invalid data: score=%d time_ms=%d", req.Score, req.TimeMs)
+		http.Error(w, "invalid score", http.StatusBadRequest)
 		return
 	}
 
 	rank, total, err := scoreboard.AddScore(req.Name, req.Score, req.TimeMs)
 	if err != nil {
-		http.Error(w, "failed to save score", http.StatusInternalServerError)
+		log.Printf("ScoresHandler AddScore error: %v", err)
+		http.Error(w, "could not store score", http.StatusInternalServerError)
 		return
 	}
 
-	resp := postScoreResponse{
-		Rank:       rank,
-		Percentile: Percentile(rank, total),
-		Total:      total,
-	}
+	pct := Percentile(rank, total)
 
-	writeJSON(w, http.StatusCreated, resp)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(struct {
+		Rank       int     `json:"rank"`
+		Percentile float64 `json:"percentile"`
+		Total      int     `json:"total"`
+	}{
+		Rank:       rank,
+		Percentile: pct,
+		Total:      total,
+	})
+
 }
 
 func handleGetScores(w http.ResponseWriter, r *http.Request) {

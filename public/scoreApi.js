@@ -14,7 +14,7 @@ export async function submitScore({ name, score, timeMs }) {
 }
 
 export async function fetchScores(page = 1, perPage = 5) {
-  const url = `${BASE_URL}?page=${page}&per_page=${perPage}`;
+  const url = `${BASE_URL}?page=${page}&per_page=${perPage}`; //query params
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to fetch scores: ${res.status}`);

@@ -127,14 +127,14 @@ export class Player extends Entity {
 
     // Limit active bombs
     if (this.bombs.length >= 5) {
-      console.log("Max bombs reached, wait for one to explode.");
+      //console.log("Max bombs reached, wait for one to explode.");
       return;
     }
 
     // Prevent stacking bombs on the same tile
     const existingBomb = entities.some(e => e instanceof Bomb && e.x === this.x && e.y === this.y);
     if (existingBomb) {
-      console.log("There's already a bomb here!");
+      //console.log("There's already a bomb here!");
       return;
     }
     const bomb = new Bomb(this.x, this.y, this.bombRadius, this.tileMap);
@@ -317,7 +317,7 @@ export class Bomb extends Entity {
   }
 
   explode() {
-    console.log("💥 Bomb exploded!");
+    // //console.log("💥 Bomb exploded!");
     this.el.remove();
 
     const explosion = new Explosion(this.x, this.y);
@@ -355,7 +355,7 @@ export class Explosion extends Entity {
     }
   }
   explode() {
-    console.log("💥 explosion ended!");
+    //console.log("💥 explosion ended!");
     this.el.remove();
     const index = entities.indexOf(this);
     if (index > -1) {
